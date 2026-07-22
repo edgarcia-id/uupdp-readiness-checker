@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UU PDP Readiness Checker | Ed Garcia (NusaIT)</title>
+    <link rel="icon" href="assets/img/icon-nusait.webp" sizes="192x192" type="image/webp" />
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .header-brand { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 25px; border-bottom: 4px solid #f39c12; margin-bottom: 30px; }
+        .card-custom { border: none; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .q-section { background-color: #e9ecef; padding: 12px 15px; font-weight: bold; border-left: 5px solid #1e3c72; margin-top: 25px; margin-bottom: 20px; color: #1e3c72; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;}
+        .question-text { font-size: 0.95rem; font-weight: 600; color: #2c3e50; margin-bottom: 10px; }
+        .question-desc { font-size: 0.8rem; color: #6c757d; margin-bottom: 10px; display: block; }
+        .btn-group-custom .btn { font-size: 0.85rem; padding: 6px 12px; }
+        .score-display { font-size: 3.5rem; font-weight: bold; line-height: 1; }
+    </style>
+</head>
+<body>
+
+<div class="header-brand">
+    <div class="container d-flex justify-content-between align-items-center flex-wrap">
+        <div>
+            <h3 class="mb-0 fw-bold"><i class="fas fa-user-shield"></i> UU PDP Readiness Audit</h3>
+            <p class="mb-0 opacity-75 small">Comprehensive Self-Assessment for Indonesia Law No. 27/2022</p>
+        </div>
+        <div class="text-end small mt-2 mt-md-0">
+            Standardized by <a href="https://nusait.com" class="text-warning text-decoration-none fw-bold">Ed Garcia (NusaIT)</a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card card-custom p-4">
+                <div class="row mb-4 bg-light p-3 rounded border">
+                    <div class="col-md-6 mb-2 mb-md-0">
+                        <label class="form-label small fw-bold text-muted">Company / Organization Name</label>
+                        <input type="text" id="companyName" class="form-control form-control-sm" placeholder="e.g. PT Maju Bersama">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold text-muted">Assessor Name & Role</label>
+                        <input type="text" id="assessorName" class="form-control form-control-sm" placeholder="e.g. Budi (IT Manager / DPO)">
+                    </div>
+                </div>
+
+                <form id="assessmentForm">
+                    <div class="q-section">Part 1: Governance & Accountability</div>
+                    
+                    <div class="mb-4">
+                        <p class="question-text">1.1 Lawful Basis & Explicit Consent</p>
+                        <span class="question-desc">Do you have a clear, documented lawful basis (e.g., explicit consent, contractual necessity) before collecting any personal data?</span>
+                        <div class="btn-group w-100 btn-group-custom" role="group">
+                            <input type="radio" class="btn-check" name="q1" id="q1_yes" value="1">
+                            <label class="btn btn-outline-success" for="q1_yes">Yes, Documented</label>
+                            <input type="radio" class="btn-check" name="q1" id="q1_partial" value="0.5">
+                            <label class="btn btn-outline-warning" for="q1_partial">Partial / Implicit</label>
+                            <input type="radio" class="btn-check" name="q1" id="q1_no" value="0" checked>
+                            <label class="btn btn-outline-danger" for="q1_no">No</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="question-text">1.2 Privacy Notice Transparency</p>
+                        <span class="question-desc">Is there a clear Privacy Policy available to data subjects detailing what data is collected, why, and how long it is stored?</span>
+                        <div class="btn-group w-100 btn-group-custom" role="group">
+                            <input type="radio" class="btn-check" name="q2" id="q2_yes" value="1">
+                            <label class="btn btn-outline-success" for="q2_yes">Yes, Updated</label>
+                            <input type="radio" class="btn-check" name="q2" id="q2_partial" value="0.5">
+                            <label class="btn btn-outline-warning" for="q2_partial">Draft / Outdated</label>
+                            <input type="radio" class="btn-check" name="q2" id="q2_no" value="0" checked>
+                            <label class="btn btn-outline-danger" for="q2_no">No</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="question-text">1.3 Data Protection Officer (DPO)</p>
+                        <span class="question-desc">Has the organization formally appointed a Data Protection Officer (Pejabat/Petugas Pelindungan Data Pribadi)?</span>
+                        <div class="btn-group w-100 btn-group-custom" role="group">
+                            <input type="radio" class="btn-check" name="q3" id="q3_yes" value="1">
+                            <label class="btn btn-outline-success" for="q3_yes">Yes, Appointed</label>
+                            <input type="radio" class="btn-check" name="q3" id="q3_partial" value="0.5">
+                            <label class="btn btn-outline-warning" for="q3_partial">Assigned as secondary role</label>
+                            <input type="radio" class="btn-check" name="q3" id="q3_no" value="0" checked>
+                            <label class="btn btn-outline-danger" for="q3_no">No</label>
+                        </div>
+                    </div>
+
+                    <div class="q-section">Part 2: Data Subject Rights (Hak Subjek Data)</div>
+
+                    <div class="mb-4">
+                        <p class="question-text">2.1 Right to Access & Update</p>
+                        <span class="question-desc">Do you have a mechanism (UI/SOP) allowing users to request access to or correction of their personal data?</span>
+                        <div class="btn-group w-100 btn-group-custom" role="group">
+                            <input type="radio" class="btn-check" name="q4" id="q4_yes" value="1">
+                            <label class="btn btn-outline-success" for="q4_yes">Yes, Automated/SOP</label>
+                            <input type="radio" class="btn-check" name="q4" id="q4_partial" value="0.5">
+                            <label class="btn btn-outline-warning" for="q4_partial">Manual/Ad-hoc</label>
+                            <input type="radio" class="btn-check" name="q4" id="q4_no" value="0" checked>
+                            <label class="btn btn-outline-danger" for="q4_no">No Mechanism</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="question-text">2.2 Right to Erasure (Right to be Forgotten)</p>
+                        <span class="question-desc">Can you completely purge a user's data from active databases and backups upon their legitimate request?</span>
+                        <div class="btn-group w-100 btn-group-custom" role="group">
+                            <input type="radio" class="btn-check" name="q5" id="q5_yes" value="1">
+                            <label class="btn btn-outline-success" for="q5_yes">Yes, Full Purge</label>
+                            <input type="radio" class="btn-check" name="q5" id="q5_partial" value="0.5">
+                            <label class="btn btn-outline-warning" for="q5_partial">Partial (Soft Delete only)</label>
+                            <input type="radio" class="btn-check" name="q5" id="q5_no" value="0" checked>
+                            <label class="btn btn-outline-danger" for="q5_no">No</label>
+                        </div>
+                    </div>
+
+                    <div class="q-section">Part 3: IT Security & Processing Principles</div>
+
+                    <div class="mb-4">
+                        <p class="question-text">3.1 Data Minimization & Retention</p>
+                        <span class="question-desc">Do you automatically destroy or anonymize personal data when the retention period (or legal requirement) expires?</span>
+                        <div class="btn-group w-100 btn-group-custom" role="group">
+                            <input type="radio" class="btn-check" name="q6" id="q6_yes" value="1">
+                            <label class="btn btn-outline-success" for="q6_yes">Yes, Auto-purge SOP</label>
+                            <input type="radio" class="btn-check" name="q6" id="q6_partial" value="0.5">
+                            <label class="btn btn-outline-warning" for="q6_partial">We keep data indefinitely</label>
+                            <input type="radio" class="btn-check" name="q6" id="q6_no" value="0" checked>
+                            <label class="btn btn-outline-danger" for="q6_no">No Policy</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="question-text">3.2 Encryption in Transit & At Rest</p>
+                        <span class="question-desc">Are sensitive personal data (passwords, medical, financial, KTP) encrypted within your databases and via HTTPS/TLS?</span>
+                        <div class="btn-group w-100 btn-group-custom" role="group">
+                            <input type="radio" class="btn-check" name="q7" id="q7_yes" value="1">
+                            <label class="btn btn-outline-success" for="q7_yes">Yes, Fully Encrypted</label>
+                            <input type="radio" class="btn-check" name="q7" id="q7_partial" value="0.5">
+                            <label class="btn btn-outline-warning" for="q7_partial">Transit only (HTTPS)</label>
+                            <input type="radio" class="btn-check" name="q7" id="q7_no" value="0" checked>
+                            <label class="btn btn-outline-danger" for="q7_no">Plaintext</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="question-text">3.3 Data Protection Impact Assessment (DPIA)</p>
+                        <span class="question-desc">Do you conduct a DPIA before launching new applications or features that process high-risk personal data?</span>
+                        <div class="btn-group w-100 btn-group-custom" role="group">
+                            <input type="radio" class="btn-check" name="q8" id="q8_yes" value="1">
+                            <label class="btn btn-outline-success" for="q8_yes">Yes, Mandatory</label>
+                            <input type="radio" class="btn-check" name="q8" id="q8_partial" value="0.5">
+                            <label class="btn btn-outline-warning" for="q8_partial">Sometimes</label>
+                            <input type="radio" class="btn-check" name="q8" id="q8_no" value="0" checked>
+                            <label class="btn btn-outline-danger" for="q8_no">Never / Unknown</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="question-text">3.4 Access Control (Principle of Least Privilege)</p>
+                        <span class="question-desc">Is access to production databases containing personal data strictly limited, logged, and periodically reviewed?</span>
+                        <div class="btn-group w-100 btn-group-custom" role="group">
+                            <input type="radio" class="btn-check" name="q9" id="q9_yes" value="1">
+                            <label class="btn btn-outline-success" for="q9_yes">Yes, Strict IAM</label>
+                            <input type="radio" class="btn-check" name="q9" id="q9_partial" value="0.5">
+                            <label class="btn btn-outline-warning" for="q9_partial">Shared Credentials</label>
+                            <input type="radio" class="btn-check" name="q9" id="q9_no" value="0" checked>
+                            <label class="btn btn-outline-danger" for="q9_no">No Restriction</label>
+                        </div>
+                    </div>
+
+                    <div class="q-section">Part 4: Third-Party & Vendor Management</div>
+
+                    <div class="mb-4">
+                        <p class="question-text">4.1 Data Processing Agreements (DPA)</p>
+                        <span class="question-desc">Do you have legal contracts (DPA) with third-party vendors (Cloud, SaaS, Marketing agencies) that process data on your behalf?</span>
+                        <div class="btn-group w-100 btn-group-custom" role="group">
+                            <input type="radio" class="btn-check" name="q10" id="q10_yes" value="1">
+                            <label class="btn btn-outline-success" for="q10_yes">Yes, Legal Contracts in place</label>
+                            <input type="radio" class="btn-check" name="q10" id="q10_partial" value="0.5">
+                            <label class="btn btn-outline-warning" for="q10_partial">Standard NDA only</label>
+                            <input type="radio" class="btn-check" name="q10" id="q10_no" value="0" checked>
+                            <label class="btn btn-outline-danger" for="q10_no">No Contracts</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="question-text">4.2 Cross-Border Data Transfer</p>
+                        <span class="question-desc">If your servers/vendors are located outside Indonesia, do you ensure the destination country has equal or higher data protection standards?</span>
+                        <div class="btn-group w-100 btn-group-custom" role="group">
+                            <input type="radio" class="btn-check" name="q11" id="q11_yes" value="1">
+                            <label class="btn btn-outline-success" for="q11_yes">Yes / N/A (Local Only)</label>
+                            <input type="radio" class="btn-check" name="q11" id="q11_partial" value="0.5">
+                            <label class="btn btn-outline-warning" for="q11_partial">Not Verified</label>
+                            <input type="radio" class="btn-check" name="q11" id="q11_no" value="0" checked>
+                            <label class="btn btn-outline-danger" for="q11_no">No</label>
+                        </div>
+                    </div>
+
+                    <div class="q-section">Part 5: Incident Response (Breach Notification)</div>
+
+                    <div class="mb-4">
+                        <p class="question-text">5.1 72-Hour Breach Notification Plan</p>
+                        <span class="question-desc">Do you have an Incident Response Plan to notify the Authority and affected Data Subjects within 3x24 hours of discovering a leak?</span>
+                        <div class="btn-group w-100 btn-group-custom" role="group">
+                            <input type="radio" class="btn-check" name="q12" id="q12_yes" value="1">
+                            <label class="btn btn-outline-success" for="q12_yes">Yes, SOP Ready</label>
+                            <input type="radio" class="btn-check" name="q12" id="q12_partial" value="0.5">
+                            <label class="btn btn-outline-warning" for="q12_partial">Drafting</label>
+                            <input type="radio" class="btn-check" name="q12" id="q12_no" value="0" checked>
+                            <label class="btn btn-outline-danger" for="q12_no">No Plan</label>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="calculateScore()" class="btn btn-primary w-100 fw-bold py-3 mt-3 shadow-sm" style="font-size: 1.1rem;">
+                        <i class="fas fa-search me-2"></i> Execute Readiness Analysis
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card card-custom p-4 text-center sticky-top" style="top: 20px;">
+                <h6 class="text-uppercase text-muted fw-bold small">UU PDP Compliance Score</h6>
+                
+                <div id="scoreResult" class="score-display text-muted my-3">0%</div>
+                
+                <div id="statusBadge" class="badge bg-secondary p-2 mb-3 w-100 fs-6">Awaiting Input...</div>
+                
+                <div class="progress mb-4" style="height: 10px;">
+                    <div id="scoreProgress" class="progress-bar bg-secondary" role="progressbar" style="width: 0%"></div>
+                </div>
+
+                <p id="recommendationText" class="small text-muted mb-4">Answer all 12 controls to evaluate your organization's legal and technical readiness.</p>
+
+                <button id="downloadBtn" onclick="generateReport()" class="btn btn-danger w-100 mb-2 py-2 fw-bold" disabled>
+                    <i class="fas fa-file-pdf me-2"></i> Download Audit & Gap Report
+                </button>
+                
+                <div class="mt-4 pt-3 border-top small text-start text-muted bg-light p-3 rounded">
+                    <p class="mb-1 fw-bold text-dark"><i class="fas fa-exclamation-triangle text-warning me-2"></i> Regulatory Risk</p>
+                    <p style="font-size: 0.8rem; margin-bottom: 10px;">Failing to comply with UU PDP No. 27/2022 can result in administrative fines up to <strong>2% of annual revenue</strong>.</p>
+                    <a href="https://nusait.com/contact" target="_blank" class="btn btn-outline-dark btn-sm w-100 fw-bold">Request IT Governance Consultation</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Exact mapping for the 12 questions
+    const questionsText = [
+        "1.1 Documented Lawful Basis & Explicit Consent.",
+        "1.2 Clear & Transparent Privacy Notice.",
+        "1.3 Formal appointment of Data Protection Officer (DPO).",
+        "2.1 Mechanism for Data Subject Right to Access/Update.",
+        "2.2 Mechanism for Right to Erasure (Right to be Forgotten).",
+        "3.1 Data Minimization & strict Retention/Purge policy.",
+        "3.2 Encryption for data At Rest & In Transit.",
+        "3.3 Mandatory Data Protection Impact Assessment (DPIA).",
+        "3.4 Strict Access Control (Least Privilege) & Logging.",
+        "4.1 Data Processing Agreements (DPA) with Vendors.",
+        "4.2 Security verification for Cross-Border Data Transfers.",
+        "5.1 72-Hour Breach Notification Incident Response Plan."
+    ];
+
+    let currentScore = 0;
+    let gapItems = [];
+
+    function calculateScore() {
+        gapItems = []; 
+        let totalPoints = 0;
+        const totalQuestions = 12;
+
+        for (let i = 1; i <= totalQuestions; i++) {
+            let radios = document.getElementsByName(`q${i}`);
+            let val = 0;
+            for (let radio of radios) {
+                if (radio.checked) {
+                    val = parseFloat(radio.value);
+                    break;
+                }
+            }
+            totalPoints += val;
+
+            if (val < 1) {
+                gapItems.push({
+                    issue: questionsText[i-1],
+                    status: val === 0.5 ? "Partial Defect" : "Critical Non-Compliance",
+                    action: "Requires SOP Creation & IT Implementation"
+                });
+            }
+        }
+
+        currentScore = Math.round((totalPoints / totalQuestions) * 100);
+        
+        const scoreDisplay = document.getElementById('scoreResult');
+        const badge = document.getElementById('statusBadge');
+        const recText = document.getElementById('recommendationText');
+        const dlBtn = document.getElementById('downloadBtn');
+        const progressBar = document.getElementById('scoreProgress');
+
+        scoreDisplay.innerText = currentScore + "%";
+        progressBar.style.width = currentScore + "%";
+        
+        if (currentScore >= 85) {
+            scoreDisplay.className = "score-display text-success my-3";
+            badge.className = "badge bg-success p-2 mb-3 w-100 fs-6";
+            progressBar.className = "progress-bar bg-success";
+            badge.innerText = "High Readiness (Compliant)";
+            recText.innerText = "Excellent. Your technical and governance controls align well with UU PDP. Conduct annual reviews.";
+        } else if (currentScore >= 50) {
+            scoreDisplay.className = "score-display text-warning my-3";
+            badge.className = "badge bg-warning text-dark p-2 mb-3 w-100 fs-6";
+            progressBar.className = "progress-bar bg-warning";
+            badge.innerText = "Partial Readiness (Vulnerable)";
+            recText.innerText = "Warning. Structural gaps identified. You need to develop specific IT policies (DPA, DPIA) and upgrade security controls immediately.";
+        } else {
+            scoreDisplay.className = "score-display text-danger my-3";
+            badge.className = "badge bg-danger p-2 mb-3 w-100 fs-6";
+            progressBar.className = "progress-bar bg-danger";
+            badge.innerText = "High Risk (Non-Compliant)";
+            recText.innerText = "CRITICAL. Your organization is heavily exposed to regulatory sanctions and data breaches. Immediate executive intervention is required.";
+        }
+
+        dlBtn.disabled = false;
+    }
+
+    function generateReport() {
+        const company = document.getElementById('companyName').value || "Undisclosed Organization";
+        const assessor = document.getElementById('assessorName').value || "IT/Legal Representative";
+        
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Cover / Header
+        doc.setFillColor(30, 60, 114); 
+        doc.rect(0, 0, 210, 40, 'F');
+        doc.setFontSize(22);
+        doc.setTextColor(255, 255, 255);
+        doc.text("UU PDP READINESS AUDIT REPORT", 14, 20);
+        doc.setFontSize(11);
+        doc.text("Indonesia Personal Data Protection (Law No. 27/2022) Gap Analysis", 14, 28);
+
+        // Score Card
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(10);
+        doc.text(`Organization: ${company}`, 14, 55);
+        doc.text(`Assessed By: ${assessor}`, 14, 62);
+        doc.text(`Report Date: ${new Date().toLocaleDateString()}`, 14, 69);
+
+        // Big Score Box
+        doc.setFillColor(245, 247, 250);
+        doc.rect(130, 48, 65, 25, 'F');
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text("OVERALL READINESS SCORE", 135, 55);
+        doc.setFontSize(22);
+        
+        if(currentScore >= 85) doc.setTextColor(25, 135, 84); // Green
+        else if(currentScore >= 50) doc.setTextColor(255, 193, 7); // Yellow
+        else doc.setTextColor(220, 53, 69); // Red
+        
+        doc.setFont("helvetica", "bold");
+        doc.text(`${currentScore}%`, 135, 68);
+        doc.setFont("helvetica", "normal");
+
+        // Gap Analysis Table
+        doc.setTextColor(0);
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text("IDENTIFIED CONTROL GAPS & RECOMMENDATIONS", 14, 90);
+
+        if (gapItems.length > 0) {
+            const tableBody = gapItems.map(g => [g.issue, g.status, g.action]);
+            
+            doc.autoTable({
+                startY: 95,
+                head: [['Identified Missing Control (UU PDP Requirement)', 'Risk Status', 'Recommended Action']],
+                body: tableBody,
+                theme: 'grid',
+                headStyles: { fillColor: [44, 62, 80] }, 
+                columnStyles: {
+                    0: { cellWidth: 85 },
+                    1: { cellWidth: 35, fontStyle: 'bold' },
+                    2: { cellWidth: 60 }
+                },
+                didParseCell: function(data) {
+                    if (data.section === 'body' && data.column.index === 1) {
+                        if (data.cell.raw === 'Critical Non-Compliance') data.cell.styles.textColor = [220, 53, 69];
+                        if (data.cell.raw === 'Partial Defect') data.cell.styles.textColor = [245, 158, 11];
+                    }
+                }
+            });
+        } else {
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "normal");
+            doc.text("Excellent. No critical compliance gaps identified in this initial assessment.", 14, 105);
+        }
+
+        // Disclaimer & CTA
+        let finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 15 : 120;
+        
+        // Ensure footer fits
+        if(finalY > 240) { doc.addPage(); finalY = 20; }
+        
+        doc.setFillColor(240, 240, 240);
+        doc.rect(14, finalY, 182, 38, 'F');
+        doc.setFontSize(9);
+        doc.setTextColor(100);
+        doc.text("LEGAL DISCLAIMER:", 18, finalY + 8);
+        doc.text("This report is generated by an automated self-assessment tool based on general interpretations of UU PDP", 18, finalY + 14);
+        doc.text("No. 27/2022. It does not constitute formal legal advice. For guaranteed legal compliance, an in-depth ", 18, finalY + 19);
+        doc.text("technical and legal audit is legally required.", 18, finalY + 24);
+        
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(30, 60, 114);
+        doc.text("For Professional IT Governance & Compliance Services, visit: nusait.com", 18, finalY + 32);
+
+        doc.save(`UUPDP_Audit_${company.replace(/\s/g, '')}.pdf`);
+    }
+</script>
+
+</body>
+</html>
